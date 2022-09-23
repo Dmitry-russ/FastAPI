@@ -1,4 +1,4 @@
-from classies import dragon, chimera, basilisk
+from classies import Dragon, Chimera, Basilisk
 
 chimera_description: str = (
     "в греческой мифологии[1] огнедышащее "
@@ -58,13 +58,19 @@ data: dict = {
 #  наполнение классов из исходных данных
 def data_load(data):
     classies_keys: dict = {
-        "dragon": dragon,
-        "chimera": chimera,
-        "basilisk": basilisk,
+        "dragon": Dragon,
+        "chimera": Chimera,
+        "basilisk": Basilisk,
+    }
+    count: dict = {
+        "dragon": 0,
+        "chimera": 0,
+        "basilisk": 0,
     }
     data_base: dict = {}
     for key, value in data.items():
         data_base[key] = {}
         for i_key, i_value in value.items():
             data_base[key][i_key] = classies_keys[key](**i_value)
-    return data_base
+            count[key] += 1
+    return data_base, count

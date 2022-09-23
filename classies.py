@@ -8,7 +8,7 @@ class base:
         self.magic = magic
 
 
-class dragon(base):
+class Dragon(base):
     def __init__(self,
                  name: str,
                  weight: int,
@@ -16,15 +16,15 @@ class dragon(base):
                  height: int,
                  description: str,
                  magic: str,
-                 wingspan: int,
-                 max_altitude: int
+                 wingspan: int = None,
+                 max_altitude: int = None
                  ) -> None:
-        super().__init__(name, weight, length, height, description, magic)
+        super().__init__(name, weight, length, height, description, magic,)
         self.wingspan = wingspan
         self.max_altitude = max_altitude
 
 
-class chimera(base):
+class Chimera(base):
     def __init__(self,
                  name: str,
                  weight: int,
@@ -38,7 +38,7 @@ class chimera(base):
         self.max_speed = max_speed
 
 
-class basilisk(base):
+class Basilisk(base):
     def __init__(self,
                  name: str,
                  weight: int,
