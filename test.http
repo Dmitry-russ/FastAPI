@@ -1,41 +1,46 @@
 ###
+GET http://0.0.0.0:8000/
+
+###
 GET http://0.0.0.0:8000/dragon/
 
 ###
-PATCH   http://0.0.0.0:8000/dragon/1
+GET http://0.0.0.0:8000/basilisk/
+
+###
+GET http://0.0.0.0:8000/chimera/
+
+###
+GET http://0.0.0.0:8000/dragon/0
+
+###
+PATCH   http://0.0.0.0:8000/basilisk/0
+Content-type: application/json
+
+{
+    "name": "22",
+    "wingspan": 44,
+    "strenght": 20
+}
+
+###
+DELETE    http://0.0.0.0:8000/dragon/0
 Content-type: application/json
 
 {
     "name": "Змейка",
     "weight": 44,
-    "length": 20,
-    "height": 20,
     "description": "20",
     "magic": "20"
 }
 
 ###
-DELETE    http://0.0.0.0:8000/dragon/1
-Content-type: application/json
-
-{
-    "name": "Змейка",
-    "weight": 44,
-    "length": 20,
-    "height": 20,
-    "description": "20",
-    "magic": "20"
-}
-
-###
-POST  http://0.0.0.0:8000/dragon/
+POST  http://0.0.0.0:8000/chimera/
 Content-type: application/json
 
 {
     "name": "Гора",
     "weight": 500,
-    "length": 150,
-    "height": 156,
     "description": "змей!",
     "magic": "100"
 }

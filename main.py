@@ -1,61 +1,93 @@
 import uvicorn
 from fastapi import FastAPI
-from data import data_load, data
 from pydantic import BaseModel
-from typing import Union
-from classies import Dragon, Chimera, Basilisk
+
+from data import data_load
 
 
 class Item(BaseModel):
     name: str
     weight: int
-    length: int
-    height: int
     description: str
     magic: str
+    wingspan: int = None
+    max_altitude: int = None
+    max_speed: int = None
+    strenght: int = None
+
+
+class Patch_item(BaseModel):
+    name: str = None
+    weight: int = None
+    description: str = None
+    magic: str = None
+    wingspan: int = None
+    max_altitude: int = None
+    max_speed: int = None
+    strenght: int = None
 
 
 app = FastAPI()
 
 
-@app.get("/dragon/")
-async def get_dragon():
-    return data_base["dragon"]
+@app.get("/")
+async def get_all():
+    return data_base
 
 
-@app.post("/dragon/")
-async def new_dragon(item: Item):
-    dragon: Dragon = Dragon(**item.dict())
-    data_base["dragon"][count["dragon"]] = dragon
-    count["dragon"] += 1
-    return dragon
+@app.get("/{someone}/")
+async def get_dragon(someone: str):
+    if someone not in data_base:
+        return {"error": "Class does not exist in data_base"}
+    return data_base[someone]
 
 
-@app.get("/dragon/{id}")
-async def get_one_dragon(id: int):
-    dragon_data: dict = data_base["dragon"]
-    if id in dragon_data.keys():
-        return dragon_data[id]
-    else:
-        return {id: "not found"}
+@app.post("/{someone}/")
+async def new_dragon(someone: str, item: Item):
+    if someone not in classies_keys:
+        return {"error": "Class does not exist"}
+    someone_new = classies_keys[someone](**item.dict())
+    someone_base: dict = data_base[someone]
+    count: int = list(someone_base)[-1] if someone_base else 0
+    data_base[someone][count+1] = someone_new
+    return someone_new
 
 
-@app.patch("/dragon/{id}")
-async def change_dragon(id: int, item: Item):
-    dragon_data: dict = data_base["dragon"]
-    if id in dragon_data.keys():
-        dragon_data[id].name = item.name
-        dragon_data[id].weight = item.weight
-        return dragon_data[id]
+@app.get("/{someone}/{id}")
+async def get_one_dragon(someone: str, id: int):
+    someone_data: dict = data_base[someone]
+    if id not in someone_data.keys():
+        return {"error": "id not found"}
+    return someone_data[id]
 
 
-@app.delete("/dragon/{id}")
-async def del_dragon(id: int, item: Item):
-    dragon_data: dict = data_base["dragon"]
-    count["dragon"] -= 1
-    del dragon_data[id]
+@app.patch("/{someone}/{id}")
+async def change_dragon(someone: str, id: int, item: Patch_item):
+    if someone not in data_base:
+        return {"error": "Class does not exist in data_base"}
+    someone_data: dict = data_base[someone]
+    if id not in someone_data:
+        return {"error": "id not found"}
+    make_data = vars(item)
+    check_attr = set(dir(someone_data[id]))
+    #  надо доделать тут
+    for dt in make_data:
+        if dt not in check_attr:
+            del make_data[dt]
+    someone_data[id].patch_metod(vars(item))
+    return someone_data[id]
+
+
+@app.delete("/{someone}/{id}")
+async def del_dragon(someone: str, id: int, item: Item):
+    if someone not in data_base:
+        return {"error": "Class does not exist in data_base"}
+    someone_data: dict = data_base[someone]
+    if id not in someone_data.keys():
+        return {"error": "id not found"}
+    del someone_data[id]
 
 
 if __name__ == "__main__":
-    data_base, count = data_load(data)
+    data_base, classies_keys = data_load()
     uvicorn.run(app, host="0.0.0.0", port=8000)
