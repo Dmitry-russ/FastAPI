@@ -23,6 +23,14 @@ async def get_dragon():
     return data_base["dragon"]
 
 
+@app.post("/dragon/")
+async def new_dragon(item: Item):
+    dragon: Dragon = Dragon(**item.dict())
+    data_base["dragon"][count["dragon"]] = dragon
+    count["dragon"] += 1
+    return dragon
+
+
 @app.get("/dragon/{id}")
 async def get_one_dragon(id: int):
     dragon_data: dict = data_base["dragon"]
@@ -41,12 +49,11 @@ async def change_dragon(id: int, item: Item):
         return dragon_data[id]
 
 
-@app.post("/dragon/")
-async def new_dragon(item: Item):
-    dragon: Dragon = Dragon(**item.dict())
-    data_base["dragon"][count["dragon"]] = dragon
-    count["dragon"] += 1
-    return dragon
+@app.delete("/dragon/{id}")
+async def del_dragon(id: int, item: Item):
+    dragon_data: dict = data_base["dragon"]
+    count["dragon"] -= 1
+    del dragon_data[id]
 
 
 if __name__ == "__main__":
