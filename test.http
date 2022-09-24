@@ -21,11 +21,12 @@ Content-type: application/json
     "name": "Имя",
     "magic": "20",
     "strenght": 20,
-    "wingspan": 20
+    "wingspan": 20,
+    "билеберда": 1329489
 }
 
 ###
-DELETE    http://0.0.0.0:8000/dragon/6
+DELETE    http://0.0.0.0:8000/dragon/0
 Content-type: application/json
 
 
