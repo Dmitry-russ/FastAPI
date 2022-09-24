@@ -5,7 +5,7 @@ GET http://0.0.0.0:8000/
 GET http://0.0.0.0:8000/dragon/
 
 ###
-GET http://0.0.0.0:8000/basilisk/
+GET http://0.0.0.0:8000/basilisk/0
 
 ###
 GET http://0.0.0.0:8000/chimera/
@@ -19,12 +19,13 @@ Content-type: application/json
 
 {
     "name": "22",
-    "wingspan": 44,
-    "strenght": 20
+    "magic": "20",
+    "strenght": 20,
+    "wingspan": 20
 }
 
 ###
-DELETE    http://0.0.0.0:8000/dragon/0
+DELETE    http://0.0.0.0:8000/basilisk/0
 Content-type: application/json
 
 {
@@ -35,17 +36,20 @@ Content-type: application/json
 }
 
 ###
-POST  http://0.0.0.0:8000/chimera/
+POST  http://0.0.0.0:8000/dragon/
 Content-type: application/json
 
 {
     "name": "Гора",
     "weight": 500,
     "description": "змей!",
-    "magic": "100"
+    "magic": "100",
+    "wingspan": 100
 }
 
-
+###
+POST  http://0.0.0.0:8000/chimera/
+Content-type: application/json
 
 
 

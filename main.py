@@ -1,31 +1,8 @@
 import uvicorn
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Body
+
 
 from data import data_load
-
-
-class Item(BaseModel):
-    name: str
-    weight: int
-    description: str
-    magic: str
-    wingspan: int = None
-    max_altitude: int = None
-    max_speed: int = None
-    strenght: int = None
-
-
-class Patch_item(BaseModel):
-    name: str = None
-    weight: int = None
-    description: str = None
-    magic: str = None
-    wingspan: int = None
-    max_altitude: int = None
-    max_speed: int = None
-    strenght: int = None
-
 
 app = FastAPI()
 
@@ -42,17 +19,6 @@ async def get_dragon(someone: str):
     return data_base[someone]
 
 
-@app.post("/{someone}/")
-async def new_dragon(someone: str, item: Item):
-    if someone not in classies_keys:
-        return {"error": "Class does not exist"}
-    someone_new = classies_keys[someone](**item.dict())
-    someone_base: dict = data_base[someone]
-    count: int = list(someone_base)[-1] if someone_base else 0
-    data_base[someone][count+1] = someone_new
-    return someone_new
-
-
 @app.get("/{someone}/{id}")
 async def get_one_dragon(someone: str, id: int):
     someone_data: dict = data_base[someone]
@@ -61,25 +27,34 @@ async def get_one_dragon(someone: str, id: int):
     return someone_data[id]
 
 
+@app.post("/{someone}/")
+async def new_someone(someone: str, item: dict = Body()):
+    if someone not in classies_keys:
+        return {"error": "Class does not exist"}
+    try:
+        someone_new = classies_keys[someone](**item)
+    except TypeError:
+        return {"error": "Not such attr. Check your data."}
+    count: int = list(data_base[someone])[-1] if data_base[someone] else 0
+    data_base[someone][count+1] = someone_new
+    return someone_new
+
+
 @app.patch("/{someone}/{id}")
-async def change_dragon(someone: str, id: int, item: Patch_item):
+async def change_someone(someone: str, id: int, item: dict = Body()):
     if someone not in data_base:
-        return {"error": "Class does not exist in data_base"}
+        return {"error": "Class does not exist in data_base."}
     someone_data: dict = data_base[someone]
     if id not in someone_data:
-        return {"error": "id not found"}
-    make_data = vars(item)
-    check_attr = set(dir(someone_data[id]))
-    #  надо доделать тут
-    for dt in make_data:
-        if dt not in check_attr:
-            del make_data[dt]
-    someone_data[id].patch_metod(vars(item))
+        return {"error": "id not found."}
+    for key in item:
+        if key in dir(someone_data[id]):
+            setattr(someone_data[id], key, item[key])
     return someone_data[id]
 
 
 @app.delete("/{someone}/{id}")
-async def del_dragon(someone: str, id: int, item: Item):
+async def del_someone(someone: str, id: int):
     if someone not in data_base:
         return {"error": "Class does not exist in data_base"}
     someone_data: dict = data_base[someone]
