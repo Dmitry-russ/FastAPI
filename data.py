@@ -67,3 +67,27 @@ def data_load():
             data_base[key][i_key] = classies_keys[key](**i_value)
             count[key] += 1
     return data_base, classies_keys
+
+
+post_examples = {
+    "odd": {
+        "summary": "пример",
+        "value": {
+            "name": "Гора",
+            "weight": 500,
+            "description": "Замей горыныч",
+            "magic": "Огонь",
+            "wingspan": 100
+        }
+    },
+}
+
+patch_examples = {
+    "odd": {
+        "summary": "пример",
+        "value": {
+            "description": "Замей горыныч",
+            "magic": "Огонь"
+        }
+    },
+}
