@@ -3,28 +3,12 @@ from classies import Dragon, Chimera, Basilisk
 
 #  наполнение классов из исходных данных
 def data_load():
-    chimera_description: str = (
-        "в греческой мифологии[1] огнедышащее "
-        "чудовище с головой и шеей льва, туловищем "
-        "козы и хвостом в виде змеи; порождение Тифона и Ехидны[2]. "
-        "В переносном смысле — необоснованная, несбыточная идея."
-    )
-    basilisk_description: str = (
-        "существо, толкуемое как ядовитая "
-        "змея или как мифический чудовищный змей."
-    )
-    dragon_description: str = (
-        "Драконы в восточных культурах обычно изображаются как "
-        "бескрылые четвероногие существа с длинным змеевидным "
-        "телом, обладающие определённым интеллектом."
-    )
-
     data: dict = {
         "dragon": {
             0: {
                 "name": "Горыныч",
                 "weight": 240,
-                "description": dragon_description,
+                "description": "просто дракон",
                 "magic": "огонь",
                 "wingspan": 143,
                 "max_altitude": 2500,
@@ -34,7 +18,7 @@ def data_load():
             0: {
                 "name": "Матильда",
                 "weight": 100,
-                "description": chimera_description,
+                "description": "обычная химера",
                 "magic": "огонь",
                 "max_speed": 135,
             }
@@ -43,7 +27,7 @@ def data_load():
             0: {
                 "name": "Зубр",
                 "weight": 112,
-                "description": basilisk_description,
+                "description": "среднеазиатский василиск",
                 "magic": "яд",
                 "strenght": 145,
             }
