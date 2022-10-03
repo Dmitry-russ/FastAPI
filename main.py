@@ -17,6 +17,16 @@ app = FastAPI()
 async def get_all():
     return data_base
 
+# http://127.0.0.1:8000/creatures/?creature_kind=dragon
+@app.get("/creatures/", responses=get_responses)
+async def get_with_params(creature_kind: str = ""):
+    return f"You want a creature {creature_kind}"
+
+# тут все будет ОК, т.к. этот url выше
+@app.get("/another_url/", responses=get_responses)
+async def get_another_url():
+    return "Show results for another_url"
+
 
 @app.get("/{someone}/", status_code=200, responses=get_class_response)
 async def get_someone(someone: str):
@@ -25,6 +35,11 @@ async def get_someone(someone: str):
             content={"error": "Class does not exist in data_base"},
             status_code=400)
     return data_base[someone]
+
+# а вот сюда мы не будем попадать
+@app.get("/another_url_2/", responses=get_responses)
+async def get_another_url_2():
+    return "Show results for another_url_2"
 
 
 @app.get("/{someone}/{id}", responses=get_id_response)
